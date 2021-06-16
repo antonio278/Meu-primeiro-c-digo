@@ -1,0 +1,1045 @@
+#include<stdio.h>  // Biblioteca  para entrada e saida de dados input e output.
+#include<conio.h> // Biblioteca para usar a função getch();
+#include<locale.h>// Permite usar acentuações e simbolos.
+#include<math.h> // Permite usar as funções matemáticas.
+#include<stdlib.h> // permite usar um emulador e funções system , por ex: system pause, system color 0F; system cls;
+#include<string.h>// Permite utilizar as funcões para strings Ex: strcyp.
+#include<time.h> //para manipulação de datas e horários.
+
+struct tipo_endereco //Usando struct para  cadastro de endereço do cliente.
+{
+int num;
+char email;
+char rua [40];
+char bairro[40];
+char cidade[40];
+char estado[3];
+int cep;
+};
+
+struct tipo_data_nascimento // Usando struct para data de nascimento , mês e ano do cliente.
+{
+  int dia;
+  int mes;
+  int ano;
+};
+
+struct cad_cliente // struct para cadastro de cliente com aninhamento de structs.
+{
+  char nome_cliente[60];
+  int tele;
+  int senha;
+  int cpf;
+  int ddd;
+  int card;
+  int agen;
+  int cont;
+  
+  struct tipo_endereco endereco; // Declaração de struct tipo_endereço e variavél endereço;
+
+  struct tipo_data_nascimento data_nascimento; // Declaração de struct tipo_data nascimento e variavél data_nascimento.
+
+}cad_cliente[1]; //Vetor de struct para usar no loop for. 
+
+struct hardware{ // Struct para  os itens da parte de hardware.
+    char nome[100];
+};
+
+struct software{ // Stuct para os itens da parte de software.
+    char nome[100];
+};
+
+int exibir_menu(); // Protótipo  para exibir menu.
+int exibir_hardware_periferico(int op);// Protótipo para exibir menu dos itens da parte de hardware e periféricos.
+int exibir_software(int op);// Protótipo para exibir menu  dos itens da parte software.
+int soma_teclado (int ophardware_periferico); // Protótipo para atribuir valores dos itens da parte de hardware e periféricos.
+int soma_pacote(int opsoft);// Protótipo para atribuir valores dos itens da parte de software.
+void exibir_finalizar();// Protótipo para finalizar o programa 
+void exibir_inicializar ();// Protótipo de carregamento
+
+int a = 0; // variavel para uso no loop for.
+int cont1=0; // contador para contar os itens da parte de hardware e periféricos.
+int cont2=0; // contador para os itens de software.
+char prod_hardware[30][200]; // vetor para armazenar a quantidade de itens parte hardware e o tamanho das strings.
+char prod_software[30][200]; // vetor para armazenar a quantidade de itens  parte  software e o tamanho das strings.
+//obs: nao existe matrizes de strings
+
+ int main(){ //CÓDIGO PRINCIPAL 
+	system("Color 0F"); // Função para colocar cor no back ground.
+	setlocale(LC_ALL,"");// Declaração da função set locale.
+
+    int op,opc,ophardware_periferico,opsoft;
+    int i,comp,quant,fechar;
+    float total1,total2,total3 ,x,y; // Declarações da variavéis 
+    float ktecls = 0;
+    float tsofs = 0;  // Declarações das variaveis para somar os itens software.
+    float totalpedido; // variavél para amarzenar a soma das variavéis (ktecls + tsofs);
+    int preco_tecl,preco_soft; // Declaração das variavéis para receber os valores dos itens.
+    char dateStr [9]; // Vetor para armazenar a data do sistema.
+	char timeStr [9];// Vetor para  armazenar a hora do sitema.
+	
+    while(opc != 2){ // loop com while para opção de cadastro.
+    	
+        while(opc != 1 && opc != 2){ /* loop com while para caso; se a opção digitada for diferente de 1 e 2 
+		irá imprimir opção inválida	*/
+    	printf("\n\t\t\t\t----------------------------------------------------");
+        printf("\n\t\t\t\t               [    OPÇÕES    ]               ");
+        printf("\n\t\t\t\t----------------------------------------------------");
+        
+    	printf("\n\n\t\t\t\tOlá ! Sou seu atendente virtual .");
+    	printf("\n\t\t\t\tEstou aqui para te auxiliar nas escolhas dos itens.");
+    	printf("\n\t\t\t\tFaça agora seu cadastro e comece a comprar.");
+    	
+        printf("\n\n\t\t\t\tVoce já tem cadastro?");
+        printf("\n\n\t\t\t\t[1]- sim.");
+        printf("\n\t\t\t\t[2]- Nao.");
+        printf("\n\n\t\t\t\tDigite uma opção: ");
+        scanf("%d",&opc); // pegando valor do usuário com scanf.
+        system("cls");
+			if (opc != 1 && opc != 2){
+				printf("\n\t\t\t\t-----------------------------------------------------");
+        		printf("\n\n\t\t\t\t\t\tOpção inválida,");
+        		printf("\n\t\t\t\t\t\tTente novamente!!!");
+        		printf("\n\n\t\t\t\t-----------------------------------------------------");
+        		printf("\7");
+			}
+			Sleep(2000); // Sleep para dormir por 2 segundos.
+			system("cls");// Função para limpar tela.
+		}
+        if(opc == 1){
+        	system("cls"); 
+        	printf("\n\n\t\t\t\t----------------[ LOGING ]--------------------");
+        	printf("\n\n\t\t\t\tNome do cliente: ");
+			fflush(stdin);// Função para apagar o buffer do teclado.
+			gets(cad_cliente[1].nome_cliente);// usando gets para entrada de dados, vetor de struct e variavel 
+			// para armazenar nome do cliente.
+			printf("\n\t\t\t\tSenha: ");  
+			/* -- Usando um laço de repetição com for 
+			
+			 fazendo com que o vetor de structna posição (i).senha, seja igual
+			a getch();
+			
+			Usando getch para pegar os valores da teclas por ex:
+			1234, e usando putchar como uma funcão de saída de dados 
+			que permite escrever apenas um caracter(*) */
+            i=0;
+            for(i=0;i<4;i++){					
+		
+            cad_cliente[i].senha = getch();
+                putchar('*');
+            
+                cad_cliente[i].senha='\0';
+                
+            }
+            getch(); // Função getch para pegar qualquer tecla do usuário.
+            system("cls"); // Função para limpar tela.		
+	       }
+	    else
+            if(opc==2){
+                system("cls");
+                printf("----------------------------------");
+                printf("\n\n    [ Cadastro dos clientes ]\n\n");
+				printf("----------------------------------");
+				
+			for(i=0;i<1;i++) // Usando loop for para a parte de cadastro dos clientes
+			{
+			  
+			  printf("\n\nNome do cliente: "); 
+			  fflush(stdin); // o fflush serve para apagar o buff do teclado
+			  gets(cad_cliente[i].nome_cliente); // Vetor de struct na posição (i) e variavel para  nome do cliente.
+			  
+			  printf("\nDDD: "); // vetor de struct na posição (i) e variavél para DDD.
+			  scanf("%d",&cad_cliente[i].ddd);
+			  
+			  printf("\nTelefone: ");// vetor de struct na posição (i) e variavle para telefone.
+			  scanf("%d",&cad_cliente[i].tele);
+			  
+			  printf("\nRua: ");// vetor de struct na posição (i) e variavle para Rua.
+			  fflush(stdin);
+			  gets(cad_cliente[i].endereco.rua);
+			  
+			  printf("\nNº: ");// vetor de struct na posição (i) e variavle para numero.
+			  scanf("%d",&cad_cliente[i].endereco.num);
+			  
+			  printf("\nBairro:");// vetor de struct na posição (i) e variavle para Bairro.
+			  fflush(stdin);
+			  gets(cad_cliente[i].endereco.bairro);
+			  
+			  printf("\nCidade: ");// vetor de struct na posição (i) e variavel para cidade 
+			  fflush(stdin);
+			  gets(cad_cliente[i].endereco.cidade); 
+			  system("cls");
+			  
+			  printf("\nEstado: ");
+			  fflush(stdin);
+			  gets(cad_cliente[i].endereco.estado); // vetor de struct na posição (i) e variavel para estado 
+			  
+			  printf("\nCEP: ");
+			  scanf("%d",&cad_cliente[i].endereco.cep); // vetor de struct na posição (i) e variavel para cep 
+			  
+			  printf("\nDia de nascimento: ");
+			  scanf("%d",&cad_cliente[i].data_nascimento.dia); // vetor de struct na posição (i) e variavel para dia 
+			  
+			  printf("\nMes de nascimento: ");
+			  scanf("%d",&cad_cliente[i].data_nascimento.mes); // vetor de struct na posição (i) e variavel para mes 
+			  
+			  printf("\n\nAno de nascimento: ");
+			  scanf("%d",&cad_cliente[i].data_nascimento.ano); // vetor de struct na posição (i) e variavel para ano 
+			  
+			  printf("\nCPF: ");
+			  scanf("%d",&cad_cliente[i].cpf); // vetor de struct na posição (i) e variavel para cpf 
+			  
+			  printf("\nSenha: ");
+	  
+            i=0;
+            for(i=0;i<4;i++){
+            	
+	           cad_cliente[i].senha = getch();
+	           putchar('*');
+	            
+	           cad_cliente[i].senha='\0';
+	        }
+            getch();
+			            
+			  system("cls");
+			}
+			printf("---------------------------------------------");
+			printf("\n\n       [ CLIENTE CADASTRADO ]        \n\n");
+			printf("---------------------------------------------");
+	            
+			for(i=0;i<1;i++){ //EXIBIR OS DADOS IMPRESSOS QUE O USUARIO DIGITOU  
+				
+			_strdate(dateStr);
+		    _strtime( timeStr );
+		    printf("\n DATA:   %s          HORA: %s  ",dateStr,timeStr);
+			printf("\n\n Nome:             %s",cad_cliente[i].nome_cliente);
+			printf("\n Rua:              %s",cad_cliente[i].endereco.rua);
+			printf("\n Numero:           %d",cad_cliente[i].endereco.num);
+		    printf("\n Bairro:           %s",cad_cliente[i].endereco.bairro);
+			printf("\n Cidade:           %s",cad_cliente[i].endereco.cidade);
+			printf("\n Estado:           %s",cad_cliente[i].endereco.estado);
+			printf("\n Cep:              %d",cad_cliente[i].endereco.cep);
+			printf("\n CPF:              %d",cad_cliente[i].cpf);
+			printf("\n Dia de nasc:      %d",cad_cliente[i].data_nascimento.dia);
+			printf("\n Mes de nasc:      %d",cad_cliente[i].data_nascimento.mes);
+			printf("\n Ano de nasc:      %d",cad_cliente[i].data_nascimento.ano);
+			  
+			printf("\n\n----------------------------------------------");
+			printf("\nPressione qualquer tecla para continuar");
+			  
+			}
+			getch(); //irá esperar qualquer tecla digitada para seguir a outra linha 
+	     }
+	        Sleep(1000);
+	        system("cls");
+	        
+	        
+	        printf("                                                                         \n\n\n\n\n\n\n");Sleep(200);
+	        printf("\t\t\t\t *********      **********      ************         *****        \n");Sleep(200);
+	        printf("\t\t\t\t  *******     **************    ************         *****        \n");Sleep(200);
+	        printf("\t\t\t\t  *******    ****************   *****            *************    \n");Sleep(200);
+	        printf("\t\t\t\t  *******    ****        ****   *****            *************    \n");Sleep(200);
+	        printf("\t\t\t\t  *******    ****        ****   ************         *****        \n");Sleep(200);
+	        printf("\t\t\t\t  *******    ****************   ************         *****        \n");Sleep(200);
+	        printf("\t\t\t\t  *******    ****************   *****                     PLUS    \n");Sleep(200);
+	        printf("\t\t\t\t  *******    ****        ****   *****                             \n");Sleep(200);
+	        printf("\t\t\t\t  *******    ****        ****   ************                      \n");Sleep(200);
+	        printf("\t\t\t\t *********  *******    *******  ************                      \n");Sleep(200);
+	        
+	        printf("\n\n\t\t\t\tOlá! Bem-Vindo a sua loja de Produtos para notebook e PCS!!! \n"); //exibir a logomarca 
+			Sleep(3000); //sleep para sormir 3s     
+			system("cls"); //limpar a tela 
+			exibir_inicializar (); // declaração de função para exibir o carregamento 
+		
+    while(op != 4){ //se a opção for diferente de 1,2,3 e 4 irá aparecer 
+	//"opção invalida" e retornar novamente ao menu
+	
+    do{
+    	
+        op = exibir_menu(); //atribuição da função exibir menu para a variavel 'op' utilizando switch case
+       
+        switch(op){
+        case 1:
+        ophardware_periferico =  exibir_hardware_periferico(ophardware_periferico); /*atribuição e declaração da função
+		'exibir_hardware_periferico'
+		passando como parametro 'ophardware_periferico'*/ 
+        preco_tecl = soma_teclado(ophardware_periferico); /*atribuição e declaração da função 'soma_teclado' 
+		passando como parametro 'ophardware_periferico'*/
+        ktecls = preco_tecl + ktecls; //atribuindo a soma de 'preco_tecl' + 'ktecls' para 'ktecls'
+        
+        break;
+        
+        case 2:
+        opsoft = exibir_software(opsoft); /*atribuição e declaração da função 'exibir_software'
+		passando como parametro 'opsoft'*/ 
+        preco_soft = soma_pacote(opsoft); /*atribuição e declaração da função 'soma_pacote' 
+		passando como parametro 'opsoft'*/
+        tsofs = preco_soft + tsofs; //atribuindo a soma de 'preco_soft' + 'tsoft' para 'tsoft'
+
+        break;
+       }
+    
+    }while(op !=  3);
+    totalpedido = ktecls+tsofs; //totalpedido vai receber o valor da soma ktecls + tsofs
+    printf("\n\n\n\t\t\t\t-----------------------------------------------------------");
+    printf ("\n\n\n\t\t\t\t\tO valor total de seu pedido é: R$ %.2f", totalpedido);
+    printf("\n\n\t\t\t\t----------------------------------------------------------");
+    printf("\7");//função para exibir 'bip' 
+    printf("\n\n\t\t\t\t\tComo você gostaria de pagar? ");
+    printf("\n\n\t\t\t\t\t[1]-Parcelado / cartão.");
+    printf("\n\t\t\t\t\t[2]-Avista 20%% OFF ");
+    printf("\n\t\t\t\t\t[3]-Avista Cartão 2%% juros. ");
+    printf("\n\t\t\t\t\t[4]-Sair");
+    printf("\n\n\t\t\t\t\tOpção: ");
+    scanf("%d",&comp);
+    system("cls");
+    if(comp==1){
+    	for(i = 0;i < 1; i++ ){ //laço de repetição for para exibir dados do cartao do cliente 
+  	
+    	printf("\n\n\t\t\t\tNº do cartão: ");
+    	scanf("%d",&cad_cliente[i].card); //adicionando para vetor de struct cad_cliente na posição 'i' e variavel card
+    	
+    	printf("\n\n\t\t\t\tAgência: ");
+    	scanf("%d",&cad_cliente[i].agen);
+    	
+    	printf("\n\t\t\t\tNº da conta: ");
+    	scanf("%d",&cad_cliente[i].cont);
+    	
+    	printf("\n\t\t\t\tInforme quantas vezes  você quer pagar: ");
+    	scanf("%d",&quant);
+	}
+    	total1 = (totalpedido / quant);
+    
+    	system("cls");
+    	
+		printf("\t\t\t\t----------------[ comprovante ]-------------");
+		
+		_strdate(dateStr);
+		_strtime( timeStr );
+		printf("\n\n\t\t\t\tDATA:   %s          HORA: %s  ",dateStr,timeStr);
+		
+		printf("\n\n\t\t\t\tItens:  \n");
+
+		if (cont1 != 0){ /* contador para contar os itens da parte de hardware e periféricos.
+		nesse caso ele ira zerar a variavel*/	
+			printf("\n\t\t\t\t--------Hardware/Periféricos-------");
+		}
+	
+		for (a=0;a<cont1;a++){
+   			printf("\n\n                                %s", prod_hardware[a]);
+       	}
+       	
+		if (cont2 != 0){
+			printf("\n\n\t\t\t\t--------Software---------");
+		}
+		   		
+		for(a=0;a<cont2;a++){
+			printf("\n\n                                %s", prod_software[a]);
+		}	
+		
+    	printf("\n\n\n\t\t\t\t-Você fez uma compra de R$ %0.2f",totalpedido);
+    	printf("\n\t\t\t\t-Você vai pagar %d parcela/(s) de R$ %0.2f",quant,total1);
+    	printf("\a");
+    	
+    	printf("\n\n\t\t\t\t-----------------------------------------------");
+    	
+    	printf("\n\n\t\t\t\tObrigado pela preferência, Volte sempre!!!");
+    	
+    	printf("\n\n\t\t\t\t---------------------------------------------");
+    	
+    	printf("\n\n\t\t\t\tPressione qualquer tecla para continuar");
+    	
+    	for (a=0; a<cont1; a++){
+			strcpy(prod_hardware[a], ""); //vai limpar o conteudo que esta no carrinho da compra 
+		}
+				
+		cont1 = 0; //cont1=(hardware e periféricos.)vai voltar a ser limpo novamente
+				
+		for (a=0; a<cont2; a++){
+			strcpy(prod_software[a], "");
+		}
+				
+		cont2 = 0;//cont2=(software)vai voltar a ser limpo novamente	
+    	total1 = 0;
+    	totalpedido = 0;
+    	ktecls = 0;
+    	tsofs = 0;
+    	
+    	getch();
+    	system("cls"); //vai limpar a tela
+	}
+	else
+		if(comp==2){			
+			total2 = totalpedido*0.8;//total2 vai receber o valor - 20%
+			
+			printf("\t\t\t\t----------------[ comprovante ]-------------");
+			_strdate(dateStr);
+			_strtime( timeStr );
+			printf("\n\n\t\t\t\tDATA:   %s          HORA: %s  ",dateStr,timeStr);
+		
+			printf("\n\n\t\t\t\tItens:  \n");
+			
+			if(cont1 != 0){
+				printf("\n\t\t\t\t--------------Hardware/Periféricos----------");
+				
+			}
+		
+			for(a=0;a<cont1;a++){
+	   		    printf("\n\n                                %s", prod_hardware[a]);
+	   		   
+	    	}
+	       	
+			if(cont2 != 0){
+				printf("\n\n\t\t\t\t------------SOFTWARE------------------------");
+				
+			}
+			   		
+			for(a=0;a<cont2;a++){
+				printf("\n\n                                %s", prod_software[a]);
+			}	
+					
+	    	printf("\n\n\n\t\t\t\t-Você fez uma compra de R$ %0.2f",totalpedido);
+	    	printf("\n\t\t\t\t-Desconto de 20%%.");
+	    	printf("\n\t\t\t\t-Você vai pagar  R$ %0.2f",total2);
+	    	printf("\7");
+	    	
+	    	printf("\n\n\t\t\t\t--------------------------------------------");
+	    	
+	    	printf("\n\n\t\t\t\tObrigado pela preferência, Volte sempre!!!");
+	    	
+	    	printf("\n\n\t\t\t\t--------------------------------------------");
+	    	
+	    	printf("\n\n\t\t\t\tPressione qualquer tecla para continuar");
+	    	
+	    	//linha de italo
+	    	
+	    	getch();
+	    	system("cls");
+    	
+			for (a=0; a<cont1; a++){
+				strcpy(prod_hardware[a], ""); //vai limpar o conteudo que esta no carrinho da compra 
+			}
+				
+			cont1 = 0;
+				
+			for (a=0; a<cont2; a++){
+				strcpy(prod_software[a], "");
+			}
+				
+			cont2 = 0;		
+			total2 = 0;
+			totalpedido = 0;
+    		ktecls = 0;
+    		tsofs = 0;	
+		}
+		else
+			if(comp==3){
+				for(i = 0;i < 1;i++){
+				
+				printf("\n\n\t\t\t\tNº do cartão: ");
+		    	scanf("%d",&cad_cliente[i].card);
+		    	
+		    	printf("\n\n\t\t\t\tAgência: ");
+		    	scanf("%d",&cad_cliente[i].agen);
+		    	
+		    	printf("\n\t\t\t\tNº da conta: ");
+		    	scanf("%d",&cad_cliente[i].cont);
+			}
+		    	system("cls");
+				
+				total3 = totalpedido*1.02; //ira adicionar 2% de juros 
+					
+				printf("\t\t\t\t----------------[ comprovante ]---------------------");
+				_strdate(dateStr);
+				_strtime( timeStr );
+				printf("\n\n\t\t\t\tDATA:   %s          HORA: %s  ",dateStr,timeStr);
+		
+				printf("\n\n\t\t\t\tItens:  \n");
+				
+				if (cont1 != 0){
+					printf("\n\t\t\t\t--------Hardware/Periféricos---------");
+				}
+			
+				for (a=0;a<cont1;a++){
+		   			printf("\n\n                                 %s", prod_hardware[a]);
+		       	}
+		       	
+				if (cont2 != 0){
+					printf("\n\n\t\t\t\t--------Software---------");
+				}
+				   		
+				for(a=0;a<cont2;a++){
+					printf("\n\n                                %s", prod_software[a]);
+				}	
+	
+				printf("\n\n");
+				
+		    	printf("\n\n\n\t\t\t\t-Você fez uma compra de R$ %0.2f",totalpedido);
+		    	printf("\n\t\t\t\t-Hove um acrescimo de 2%%.");
+		    	printf("\n\t\t\t\t-Você vai pagar  R$ %0.2f",total3);
+		    	printf("\7");
+		    	printf("\n\n\t\t\t\t-----------------------------------------------");
+		    	
+		    	printf("\n\n\t\t\t\tObrigado pela preferência, Volte sempre!!!");
+		    	
+		    	printf("\n\n\t\t\t\t---------------------------------------------");
+		    	
+		    	printf("\n\n\t\t\t\tPressione qualquer tecla para continuar!!!!");
+		    	
+				for (a=0; a<cont1; a++){
+					strcpy(prod_hardware[a], "");
+				}
+				
+				cont1 = 0;
+				
+				for (a=0; a<cont2; a++){
+					strcpy(prod_software[a], "");
+				}
+				
+				cont2 = 0;
+				total3 = 0;
+		    	totalpedido = 0;
+			    ktecls = 0;
+  				tsofs = 0;
+							
+				getch();
+				system("cls");
+			}
+			else
+				if(comp==4){
+				while(fechar != 2){ /*while para menu de encerramento 
+				se a opção for diferente dde 1 e 2 ira printar opção invalida*/
+				printf("\n\n\t\t\t\t\tSeu pagamento foi R$ %0.2f",totalpedido);
+				printf("\n\n\n\n\t\t\t\t\tDeseja realmente sair ?");
+				printf("\n\n\t\t\t\t\t[1]-SIM.");
+				printf("\n\t\t\t\t\t[2]-NÃO.");
+				printf("\n\n\t\t\t\t\topção: ");
+				scanf("%d",&fechar);
+				system("cls");
+				switch(fechar){
+					case 1:
+					exibir_finalizar();//função finalizar o programa
+						break;
+					case 2:
+						printf("\n\n\t\t\t\tOK ! CONTINUE COMPRANDO.");//voltar ao menu
+						Sleep(2000);
+						break;
+					default:
+						printf("\n\t\t\t\t-----------------------------------------------------");
+		        		printf("\n\n\t\t\t\t\t\tOpção inválida,");
+		        		printf("\n\t\t\t\t\t\tTente novamente!!!");
+		        		printf("\n\n\t\t\t\t-----------------------------------------------------");
+		        		printf("\7");
+		        		Sleep(2000);
+		        		system("cls");
+		        	break;
+			   	}
+		    }
+				system("cls");	
+	        }  	
+		
+        }
+
+    }	
+    getch();
+    return 0;
+}	
+int exibir_menu(){ //função para exibir menu
+	int op; //declaração da variavel 'op'
+	int i; //declaração da variavel 'i'
+
+	printf("\n\t\t\t\t\tMENU INICIAL");
+	//podemos usar a Função gotoxy(de sua preferencia);
+	/*Função kbhit para pegar valores da tabela Asc para criar uma seta seletiva, exemplo: '-->'. 
+	para interagir com a escolha do usuario quando ele apertar enter*/
+	printf("\n\n\t\t\t\t\t[1]-...........Hardware.");    
+	printf("\n\t\t\t\t\t[2]-...........Software.");
+	printf("\n\t\t\t\t\t[3]-...........PAGAR.");
+	printf("\n\t\t\t\t\t[4]-...........Sair.");
+	printf("\n\n\t\t\t\t\tFaça uma escolha:  ");
+	scanf("%d",&op); //pegar a opção do usuario
+	system("cls");
+	if(op==4){		
+	exibir_finalizar();//declaração da função finalizar 
+}   
+	if (op<1 || op>4){
+		printf("\t\t\t\t\tOpção inválida");//caso a opção seja diferente de 1 a 4 irá dar erro
+		Sleep(3000);
+		system("cls");
+		exibir_menu();
+	}
+    system("cls");
+    return op;      
+}
+
+int exibir_hardware_periferico(int op){ //função exibir o menu de hardware e perifericos 
+	
+	int ophardware_periferico;
+	
+	struct hardware teclado[5]; //declaração de struct hardware e vetor teclado de 5 posições 
+	struct hardware mouse[5];   //declaração de struct hardware e vetor mouse de 5 posições 
+	struct hardware caixa[5];   //declaração de struct hardware e vetor caixa de 5 posições 
+	struct hardware fone[5];    //declaração de struct hardware e vetor fone de 5 posições 
+	struct hardware monitor[5]; //declaração de struct hardware e vetor monitor de 5 posições 
+	struct hardware webcam[5];  //declaração de struct hardware e vetor webcam de 5 posições 
+
+
+    //usando a função 'strcpy' para copiar a string e passando para os vetores nas posições [0],[1],[2] e [3] da struct
+    strcpy(teclado[0].nome, "Teclado multilaser Basic R$ 30,00");
+    strcpy(teclado[1].nome, "Teclado Gamer semi Mecânico R$ 65,00");
+    strcpy(teclado[2].nome, "Teclado Redragon Membrana R$ 150,00");
+    strcpy(teclado[3].nome, "Teclado Razer Mecânico R$ 600");
+    
+    strcpy(mouse[0].nome, "Mouse Mutilaser Basic R$ 25,00");
+    strcpy(mouse[1].nome, "Mouse Redragon grift R$ 104,00");
+    strcpy(mouse[2].nome, "Mouse Razer react R$ 155,00");
+    strcpy(mouse[3].nome, "Mouse load tec R$ 350,00");
+    
+    strcpy(caixa[0].nome, "Caixa de Som INOVA Básica R$ 35,00");
+    strcpy(caixa[1].nome, "Caixa de Som HAVIT RGB LIGHT R$ 59,00");
+    strcpy(caixa[2].nome, "Caixa de Som HAVIT RGB LIGHT R$ 120,00");
+    strcpy(caixa[3].nome, "Caixa de Som JBL GO 3.1W R$ 175,00");
+    
+    strcpy(fone[0].nome, "Fone de ouvido PHILIPS BASIC R$ 15,00");
+	strcpy(fone[1].nome, "Headset Gmaer MULTILASER WARRIOR R$ 80,00");
+	strcpy(fone[2].nome, "Headset KRAKEN X LITE RAZER R$ 270,00");
+	strcpy(fone[3].nome, "Headset HYPER X CLOUD APLHA R$ 530,00");
+	
+	strcpy(monitor[0].nome, "Monitor 18,5 AOC LED R$ 450,00");
+	strcpy(monitor[1].nome, "Monitor AOC 21,5 FULL HD/HDMI/VGA R$ 635,00");
+	strcpy(monitor[2].nome, "Monitor GAMER CURVO 24 1MS 75Hz R$ 959,00");
+	strcpy(monitor[3].nome, "Monitor GAMER ACER 23,6  0,5ms 165Hz R$ 1600");
+	
+	strcpy(webcam[0].nome, "Webcam BAOBLAZE 1080P HD R$ 70,00");
+	strcpy(webcam[1].nome, "Webcam REDRAGON 1080 FOBOS R$ 230,00");
+	strcpy(webcam[2].nome, "Webcam GAMER STREAMING R$ 280,00");
+	strcpy(webcam[3].nome, "Webcam ULTRAHD 4K STREAMING R$ 950,00");
+	
+	printf("\n\t\t\t\t- [ HARDWARE/PERIFÉRICOS ]:"); //exibição do menu de hardware e perifericos
+	
+	printf("\n\n\t\t\t[1]-Teclado Multilaser ....................R$   30,00.");
+	printf("\n\t\t\t[2]-Teclado Gamer Semi Mecânico............R$   65,00.");
+	printf("\n\t\t\t[3]-Teclado Redragon Membrana..............R$  150,00.");
+	printf("\n\t\t\t[4]-Teclado Razer Mecânico.................R$  600,00.");
+	printf("\n\t\t\t[5]-Mouse Multilaser Básico................R$   25,00.");
+    printf("\n\t\t\t[6]-Mouse Redragon Griffin 7200 DPI........R$  104,00.");
+    printf("\n\t\t\t[7]-Mouse Razer Reathadder 6200 DPI........R$  155,00.");
+    printf("\n\t\t\t[8]-Mouse Logitech 12000 DPI...............R$  350,00.");
+    printf("\n\t\t\t[9]-Caixa de Som INOVA Básica..............R$   35,00.");
+    printf("\n\t\t\t[10]-Caixa de Som MANCER RB01...............R$   59,90.");
+    printf("\n\t\t\t[11]-Caixa de Som HAVIT RGB LIGHT...........R$  120,00.");
+    printf("\n\t\t\t[12]-Caixa de Som JBL GO 3.1W ..............R$  175,00.");
+    printf("\n\t\t\t[13]-Fone de ouvido PHILIPS BASIC...........R$   15,00.");
+	printf("\n\t\t\t[14]-Headset Gmaer MULTILASER WARRIOR.......R$   80,00.");
+	printf("\n\t\t\t[15]-Headset KRAKEN X LITE RAZER............R$  270,00.");
+	printf("\n\t\t\t[16]-Headset HYPER X CLOUD APLHA............R$  530,00.");
+	printf("\n\t\t\t[17]-Monitor 18,5 AOC LED...................R$  450,00.");
+	printf("\n\t\t\t[18]-Monitor AOC 21,5 FULL HD/HDMI/VGA......R$  635,00.");
+	printf("\n\t\t\t[19]-Monitor GAMER CURVO 24 1MS 75Hz........R$  959,00.");
+	printf("\n\t\t\t[20]-Monitor GAMER ACER 23,6  0,5ms 165Hz...R$ 1600,00.");
+	printf("\n\t\t\t[21]-Webcam BAOBLAZE 1080P HD...............R$   70,00.");
+	printf("\n\t\t\t[22]-Webcam REDRAGON 1080 FOBOS.............R$  230,00.");
+	printf("\n\t\t\t[23]-Webcam GAMER STREAMING.................R$  280,00.");
+	printf("\n\t\t\t[24]-Webcam ULTRAHD 4K STREAMING............R$  950,00.");
+	printf("\n\n\t\t\tfaça uma escolha: ");
+	scanf("%d",&ophardware_periferico); //pegar o valor do usuario e armazenando em ophardware_periferico
+    system("cls"); //limpar a tela
+    switch(ophardware_periferico){ 
+    	case 1: //utilizamos o strcpy para copiar o conteudo e adicionando para o vetor de teclado
+    		printf("\n\n\t\t\tVocê acabou de adicionar %s no carrinho", teclado[0].nome);
+    		strcpy(prod_hardware[cont1], teclado[0].nome); 
+			cont1 ++;
+			Sleep(3000);
+        	system("cls");
+    		break;
+    	case 2:
+    		printf("\n\n\t\t\tVocê acabou de adicionar %s no carrinho",teclado[1].nome);
+    		strcpy(prod_hardware[cont1],teclado[1].nome); 
+			cont1 ++;
+			Sleep(3000);
+        	system("cls");
+    		break;
+    	case 3:
+    		printf("\n\n\t\t\tVocê acabou de adicionar %s no carrinho",teclado[2].nome);
+    		strcpy(prod_hardware[cont1],teclado[2].nome); 
+			cont1 ++;
+			Sleep(3000);
+        	system("cls");
+    		break;
+    	case 4:
+    		printf("\n\n\t\t\tVocê acabou de adicionar %s no carrinho",teclado[3].nome);
+    		strcpy(prod_hardware[cont1],teclado[3].nome); 
+			cont1 ++;
+			Sleep(3000);
+        	system("cls");
+    		break;
+    	case 5: //utilizamos o strcpy para copiar o conteudo e adicionando para o vetor de mouse
+    		printf("\n\n\t\t\tVocê acabou de adicionar %s no carrinho",mouse[0].nome); 
+    		strcpy(prod_hardware[cont1],mouse[0].nome); 
+			cont1 ++;
+			Sleep(3000);
+        	system("cls");
+    		break;
+    	case 6:
+    		printf("\n\n\t\t\tVocê acabou de adicionar %s no carrinho",mouse[1].nome);
+    		strcpy(prod_hardware[cont1],mouse[1].nome); 
+			cont1 ++;
+			Sleep(3000);
+        	system("cls");
+    		break;
+    	case 7:
+    		printf("\n\n\t\t\tVocê acabou de adicionar %s no carrinho",mouse[2].nome);
+    		strcpy(prod_hardware[cont1],mouse[2].nome); 
+			cont1 ++;
+			Sleep(3000);
+        	system("cls");
+    		break;
+    	case 8:
+    		printf("\n\n\t\t\tVocê acabou de adicionar %s no carrinho",mouse[3].nome);
+    		strcpy(prod_hardware[cont1],mouse[3].nome); 
+			cont1 ++;
+			Sleep(3000);
+        	system("cls");
+    		break;
+    	case 9://utilizamos o strcpy para copiar o conteudo e adicionando para o vetor de caixa
+    		printf("\n\n\t\t\tVocê acabou de adicionar %s no carrinho",caixa[0].nome);
+    		strcpy(prod_hardware[cont1],caixa[0].nome); 
+			cont1 ++;
+			Sleep(3000);
+        	system("cls");
+    		break;
+    	case 10:
+    		printf("\n\n\t\t\tVocê acabou de adicionar %s no carrinho",caixa[1].nome);
+    		strcpy(prod_hardware[cont1],caixa[1].nome); 
+			cont1 ++;
+			Sleep(3000);
+        	system("cls");
+    		break;
+    	case 11:
+    		printf("\n\n\t\t\tVocê acabou de adicionar %s no carrinho",caixa[2].nome);
+    		strcpy(prod_hardware[cont1],caixa[2].nome); 
+			cont1 ++;
+			Sleep(3000);
+        	system("cls");
+    		break;
+    	case 12:
+    		printf("\n\n\t\t\tVocê acabou de adicionar %s no carrinho",caixa[3].nome);
+    		strcpy(prod_hardware[cont1],caixa[3].nome); 
+			cont1 ++;
+			Sleep(3000);
+        	system("cls");
+    		break;
+    	case 13://utilizamos o strcpy para copiar o conteudo e adicionando para o vetor de fone
+    		printf("\n\n\t\t\tVocê acabou de adicionar %s no carrinho",fone[0].nome);
+    		strcpy(prod_hardware[cont1],fone[0].nome); 
+			cont1 ++;
+			Sleep(3000);
+        	system("cls");
+    		break;
+    	case 14:
+    		printf("\n\n\t\t\tVocê acabou de adicionar %s no carrinho",fone[1].nome);
+    		strcpy(prod_hardware[cont1],fone[1].nome); 
+			cont1 ++;
+			Sleep(3000);
+        	system("cls");
+    		break;
+    	case 15:
+    		printf("\n\n\t\t\tVocê acabou de adicionar %s no carrinho",fone[2].nome);
+    		strcpy(prod_hardware[cont1],fone[2].nome); 
+			cont1 ++;
+			Sleep(3000);
+        	system("cls");
+    		break;
+    	case 16:
+    		printf("\n\n\t\t\tVocê acabou de adicionar %s no carrinho",fone[3].nome);
+    		strcpy(prod_hardware[cont1],fone[3].nome); 
+			cont1 ++;
+			Sleep(3000);
+        	system("cls");
+    		break;
+    	case 17:
+    		printf("\n\n\t\t\tVocê acabou de adicionar %s no carrinho",monitor[0].nome);
+    		strcpy(prod_hardware[cont1],monitor[0].nome); 
+			cont1 ++;
+			Sleep(3000);
+        	system("cls");
+    		break;
+    	case 18:
+    		printf("\n\n\t\t\tVocê acabou de adicionar %s no carrinho",monitor[1].nome);
+    		strcpy(prod_hardware[cont1],monitor[1].nome); 
+			cont1 ++;
+			Sleep(3000);
+        	system("cls");
+    		break;
+    	case 19:
+    		printf("\n\n\t\t\tVocê acabou de adicionar %s no carrinho",monitor[2].nome);
+    		strcpy(prod_hardware[cont1],monitor[2].nome); 
+			cont1 ++;
+			Sleep(3000);
+        	system("cls");
+    		break;
+    	case 20:
+    		printf("\n\n\t\t\tVocê acabou de adicionar %s no carrinho",monitor[3].nome);
+    		strcpy(prod_hardware[cont1],monitor[3].nome); 
+			cont1 ++;
+			Sleep(3000);
+        	system("cls");
+    		break;
+    	case 21:
+    		printf("\n\n\t\t\tVocê acabou de adicionar %s no carrinho",webcam[0].nome);
+    		strcpy(prod_hardware[cont1],webcam[0].nome); 
+			cont1 ++;
+			Sleep(3000);
+        	system("cls");
+    		break;
+    	case 22:
+    		printf("\n\n\t\t\tVocê acabou de adicionar %s no carrinho",webcam[1].nome);
+    		strcpy(prod_hardware[cont1],webcam[1].nome); 
+			cont1 ++;
+			Sleep(3000);
+        	system("cls");
+    		break;
+    	case 23:
+    		printf("\n\n\t\t\tVocê acabou de adicionar %s no carrinho",webcam[2].nome);
+    		strcpy(prod_hardware[cont1],webcam[2].nome); 
+			cont1 ++;
+			Sleep(3000);
+        	system("cls");
+    		break;
+    	case 24:
+    		printf("\n\n\t\t\tVocê acabou de adicionar %s no carrinho",webcam[3].nome);
+    		strcpy(prod_hardware[cont1],webcam[3].nome); 
+			cont1 ++;
+			Sleep(3000);
+        	system("cls");
+    		break;
+    	default:
+        	printf("\n\n\n\n\t\t\t\t\t\tOPÇÃO INVÁLIDA!!!!");
+        	Sleep(2000);
+        	system("cls");
+        	break;	
+	}
+        return ophardware_periferico;	//retorna um valor inteiro 
+}
+
+int exibir_software(int op){
+	int opsoft;  	
+ 	struct software software[5];
+
+    strcpy(software[0].nome, "PACOTE OFFICE 2019 PLUS R$ 139,00");
+    strcpy(software[1].nome, "CHAVE ATIVAÇÃO WINDOWS 10 PRO VITALICIO R$ 39,00");
+    strcpy(software[2].nome, "MCAFEE 2021 TOTAL PROTECTION ANTI VIRUS R$ 179,00");
+    strcpy(software[3].nome, "CORELDRAW GRAPHICS SUITE 2019 R$ 199,00");
+  
+	printf("\n\t\t\t\t- [  Software  ]:");
+    printf("\n\n\t\t\t[1]-PACOTE OFFICE 2019 PLUS.......................R$ 139,00.");
+	printf("\n\t\t\t[2]-CHAVE ATIVAÇÃO WINDOWS 10 PRO VITALICIO.......R$ 39,00.");
+	printf("\n\t\t\t[3]-MCAFEE 2021 TOTAL PROTECTION ANTI VIRUS.......R$ 179,00.");
+	printf("\n\t\t\t[4]-CORELDRAW GRAPHICS SUITE 2019.................R$ 199,00.");
+    printf("\n\n\t\t\tFaça uma escolha: ");
+    scanf("%d",&opsoft);
+    system("cls");
+    switch(opsoft){
+    	case 1:
+    		printf("\n\n\t\t\tVocê acabou de adicionar %s no carrinho",software[0].nome);
+			strcpy(prod_software[cont2],software[0].nome); //
+			cont2 ++;
+   			Sleep(3000);
+    		system("cls");
+    	break;
+    	case 2:
+    		printf("\n\n\t\t\tVocê acabou de adicionar %s no carrinho",software[1].nome);
+			strcpy(prod_software[cont2],software[1].nome); //
+			cont2 ++;
+			Sleep(3000);
+    		system("cls");      		
+    	    break;
+    	case 3:
+			printf("\n\n\t\t\tVocê acabou de adicionar %s no carrinho",software[2].nome);
+			strcpy(prod_software[cont2],software[2].nome); //
+			cont2 ++;
+    		Sleep(3000);
+    		system("cls");
+    	    break;
+    	case 4:
+    		printf("\n\n\t\t\tVocê acabou de adicionar %s no carrinho",software[3].nome);
+			strcpy(prod_software[cont2],software[3].nome); //
+			cont2 ++;
+    		Sleep(3000);
+    		system("cls");
+			break;
+		default:
+    		printf("\nOPÇÃO INVALIDA!!!!");//caso a opção não for valida(de 1 a 4)
+    		Sleep(4000);
+    		system("cls");
+    		break;
+    }
+    
+    return opsoft; //ira retornar um valor inteiro 
+}
+    
+int soma_teclado (int ophardware_periferico){ //função para atribuição dos valores para a variavel preco_tecl
+int preco_tecl;
+
+    switch (ophardware_periferico){
+        case 1:
+          preco_tecl = 30;
+          break;
+        case 2:
+           preco_tecl = 65;
+		   break;
+        case 3:
+            preco_tecl = 150;
+			break;
+        case 4:
+            preco_tecl = 600;
+		    break;
+        case 5:
+            preco_tecl = 25;
+          break;
+        case 6:
+      	    preco_tecl = 104;
+      	    break;
+        case 7:
+      	    preco_tecl = 155;
+      	    break;
+        case 8:
+      	    preco_tecl = 350;
+      	    break;
+        case 9:
+       	    preco_tecl = 35;
+       	    break;
+        case 10:
+       	    preco_tecl = 59;
+       	    break;
+       	case 11:
+       		preco_tecl = 120;
+       		break;
+       	case 12:
+       		preco_tecl = 175;
+       		break;
+       	case 13:
+       	    preco_tecl = 15;
+       	    break;
+       	case 14:
+       		preco_tecl = 80;
+       		break;
+       	case 15:
+       		preco_tecl = 270;
+       		break;
+       	case 16:
+       		preco_tecl = 530;
+       		break;
+       	case 17:
+       		preco_tecl = 450;
+       		break;
+       	case 18:
+       		preco_tecl = 635;
+       	    break;
+       	case 19:
+       		preco_tecl =959;
+       	    break;
+       	case 20:
+       		preco_tecl =1600;
+       	    break;
+       	case 21:
+       		preco_tecl =70;
+       	    break;
+       	case 22:
+       		preco_tecl =230;
+       		break;
+       	case 23:
+       		preco_tecl =280;
+       		break;
+       	case 24:
+       		preco_tecl =950;
+       		break;
+      	 default:
+      	 	preco_tecl = 0; //caso o valor selicionado não for de 1 ate 24 ira selecionar o valor 0
+      	 	break;
+		   }
+          return preco_tecl; //retornando a variavel preco_tecl
+}
+
+int soma_pacote(int opsoft){
+int preco_soft;
+ switch (opsoft){
+      case 1:
+          preco_soft = 139;
+          break;
+      case 2:
+          preco_soft = 39;
+          break;
+      case 3:
+          preco_soft = 179;
+		  break;
+	  case 4:
+	  	  preco_soft = 199;
+	  	  break;
+	  default:
+	  	preco_soft = 0;//caso nao seja o valor selecionado(1 a 4) vai dar invalido 
+	  	break;  
+	}   
+	return preco_soft; //um valor inteiro selecionado retornará a variavel preco_soft
+ }
+ 
+ 
+ void exibir_finalizar(){ //função para exibir a parte de finalização 
+ 	int i;
+ 	i =0;
+ 	for(i=0;i<2;i++){ //loop for para repetir 2x o trecho
+		
+		printf("\n\n\n\n\t\t\t\t\t\t(Finalizando)>>>                        ");
+		printf(" ");
+		Sleep(1000);
+		system("cls");
+		
+		printf("\n\n\n\n\t\t\t\t\t\t(Finalizando)    >>>                     ");
+		printf(" ");
+		Sleep(1000);
+		system("cls");
+		
+		printf("\n\n\n\n\t\t\t\t\t\t(Finalizando)            >>>             ");
+		printf(" ");
+		Sleep(1000);
+		system("cls");
+	
+		printf("\n\n\n\n\t\t\t\t\t\t(Finalizando)                        >>>  ");
+		printf(" ");
+		Sleep(1000);
+		system("cls");
+		
+		printf("\n\n\n\n\t\t\t\t\t\t(Finalizando)                            ");
+		printf(" ");
+		Sleep(1000);
+		system("cls");
+		
+	}
+
+	exit(0); // fechar o programa 
+	
+
+}   
+ 
+ void exibir_inicializar(){ //função para exibir a parte de inicializar o aplicativo
+ 	int i;
+ 	i=0;
+ 	for(i=0;i < 2;i++){ //repetir o trecho 2x
+	Sleep(1000);
+	system("cls");
+	printf("\n\n\n\t\t\t\t\t\t( INICIALIZANDO O APLICATIVO )*           ");
+	Sleep(1000);
+	
+	system("cls");
+	printf("\n\n\n\t\t\t\t\t\t( INICIALIZANDO O APLICATIVO )*  *         ");
+	Sleep(1000);
+	
+	system("cls");
+	printf("\n\n\n\t\t\t\t\t\t( INICIALIZANDO O APLICATIVO )*  *  *     ");
+	Sleep(1000);
+   }
+   
+   system("cls");
+}
+
+ //Nossas primeiras mil linhas, rumo ao milão #foguetenaotemré
